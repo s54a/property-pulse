@@ -1,5 +1,5 @@
 import "@/assets/styles/globals.css";
-import { title } from "process";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
   title: "Property Pulse | Find The Perfect Rental",
@@ -13,7 +13,8 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body>
-        <div>{children}</div>
+        <Navbar />
+        <main>{children}</main>
       </body>
     </html>
   );
