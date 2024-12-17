@@ -3,5 +3,11 @@
     "activityBar.background": "#3C2B03",
     "titleBar.activeBackground": "#543C05",
     "titleBar.activeForeground": "#FEFAF0"
-  }
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "files.autoSave": "afterDelay",
+  "prettier.endOfLine": "crlf"
 }
