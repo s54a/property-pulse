@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/assets/images/logo.png";
+import Logo from "@/assets/images/logo-white.png";
 import Profile from "@/assets/images/profile.png";
 import { FaGoogle } from "react-icons/fa";
 
