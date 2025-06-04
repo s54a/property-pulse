@@ -6,7 +6,12 @@ const override = {
 	margin: "100px auto",
 };
 
-const LoadingPage = ({ loading }: any) => {
+// Define the props interface for clarity and type safety
+interface LoadingPageProps {
+	loading: boolean;
+}
+
+const LoadingPage = ({ loading }: LoadingPageProps) => {
 	return (
 		<ClipLoader
 			color="#3b82f6"
@@ -17,4 +22,5 @@ const LoadingPage = ({ loading }: any) => {
 		/>
 	);
 };
+
 export default LoadingPage;
