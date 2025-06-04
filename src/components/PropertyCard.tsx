@@ -1,51 +1,127 @@
-const PropertyCard = () => {
+import Image from "next/image";
+import Link from "next/link";
+import { FC } from "react";
+import { FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker } from "react-icons/fa";
+
+interface Property {
+	_id: string;
+	owner: string;
+	name: string;
+	type: string;
+	description: string;
+	location: {
+		street: string;
+		city: string;
+		state: string;
+		zipcode: string;
+	};
+	beds: number;
+	baths: number;
+	square_feet: number;
+	amenities: string[];
+	rates: {
+		nightly?: number;
+		weekly?: number;
+		monthly?: number;
+	};
+	seller_info: {
+		name: string;
+		email: string;
+		phone: string;
+	};
+	images: string[];
+	is_featured: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface PropertyCardProps {
+	property: Property;
+}
+
+const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
+	const getRateDisplay = () => {
+		const { rates } = property;
+
+		if (rates.monthly) {
+			return `${rates.monthly.toLocaleString()}/mo`;
+		} else if (rates.weekly) {
+			return `${rates.weekly.toLocaleString()}/wk`;
+		} else if (rates.nightly) {
+			return `${rates.nightly.toLocaleString()}/night`;
+		}
+	};
+
 	return (
 		<div className="relative rounded-xl shadow-md">
-			<img src="images/properties/a1.jpg" alt="" className="h-auto w-full rounded-t-xl" />
+			<Image
+				height={0}
+				width={0}
+				sizes="100vw"
+				src={`/images/properties/${property.images[0]}`}
+				alt={property.name}
+				className="h-auto w-full rounded-t-xl"
+			/>
 			<div className="p-4">
 				<div className="mb-6 text-left md:text-center lg:text-left">
-					<div className="text-gray-600">Apartment</div>
-					<h3 className="text-xl font-bold">Boston Commons Retreat</h3>
+					<div className="text-gray-600">{property.type} </div>
+					<h3 className="text-xl font-bold">{property.name} </h3>
 				</div>
 				<h3 className="absolute top-[10px] right-[10px] rounded-lg bg-white px-4 py-2 text-right font-bold text-blue-500 md:text-center lg:text-right">
-					$4,200/mo
+					{getRateDisplay()}
 				</h3>
 
 				<div className="mb-4 flex justify-center gap-4 text-gray-500">
 					<p>
-						<i className="fa-solid fa-bed"></i> 3<span className="md:hidden lg:inline">Beds</span>
+						<FaBed className="mr-2 inline" />
+						{property.beds} <span className="md:hidden lg:inline">Beds</span>
 					</p>
 					<p>
-						<i className="fa-solid fa-bath"></i> 2<span className="md:hidden lg:inline">Baths</span>
+						<FaBath className="mr-2 inline" />
+						{property.baths} <span className="md:hidden lg:inline">Baths</span>
 					</p>
 					<p>
-						<i className="fa-solid fa-ruler-combined"></i>
-						1,500 <span className="md:hidden lg:inline">sqft</span>
+						<FaRulerCombined className="mr-2 inline" />
+						{property.square_feet} <span className="md:hidden lg:inline">sqft</span>
 					</p>
 				</div>
 
 				<div className="mb-4 flex justify-center gap-4 text-sm text-green-900">
-					<p>
-						<i className="fa-solid fa-money-bill"></i> Weekly
-					</p>
-					<p>
-						<i className="fa-solid fa-money-bill"></i> Monthly
-					</p>
+					{property.rates.nightly && (
+						<p>
+							<FaMoneyBill className="mr-2 inline" /> Nightly
+						</p>
+					)}
+
+					{property.rates.weekly && (
+						<p>
+							<FaMoneyBill className="mr-2 inline" /> Weekly
+						</p>
+					)}
+
+					{property.rates.monthly && (
+						<p>
+							<FaMoneyBill className="mr-2 inline" /> Monthly
+						</p>
+					)}
 				</div>
 
 				<div className="mb-5 border border-gray-100"></div>
 
 				<div className="mb-4 flex flex-col justify-between lg:flex-row">
 					<div className="mb-4 flex gap-2 align-middle lg:mb-0">
-						<i className="fa-solid fa-location-dot text-lg text-orange-700"></i>
-						<span className="text-orange-700"> Boston MA </span>
+						<FaMapMarker className="mt-1 inline text-orange-700" />
+						<span className="text-orange-700">
+							{" "}
+							{property.location.city} {property.location.state}{" "}
+						</span>
 					</div>
-					<a
-						href="property.html"
+					<Link
+						href={`/properties/${property._id}`}
 						className="h-[36px] rounded-lg bg-blue-500 px-4 py-2 text-center text-sm text-white hover:bg-blue-600"
 					>
 						Details
-					</a>
+					</Link>
 				</div>
 			</div>
 		</div>
