@@ -2,16 +2,16 @@ import { Schema, model, models } from "mongoose";
 
 const PropertySchema = new Schema(
 	{
-		owner: {
-			type: Schema.Types.ObjectId,
-			ref: "User",
-			required: true,
-		},
-
 		// owner: {
-		// 	type: String,
+		// 	type: Schema.Types.ObjectId,
+		// 	ref: "User",
 		// 	required: true,
 		// },
+
+		owner: {
+			type: String,
+			required: true,
+		},
 
 		name: {
 			type: String,
@@ -94,7 +94,7 @@ const PropertySchema = new Schema(
 	},
 	{
 		timestamps: true,
-		collection: "properties",
+		// collection: "properties",
 	},
 );
 
