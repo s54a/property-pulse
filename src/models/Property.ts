@@ -8,6 +8,11 @@ const PropertySchema = new Schema(
 			required: true,
 		},
 
+		// owner: {
+		// 	type: String,
+		// 	required: true,
+		// },
+
 		name: {
 			type: String,
 			required: true,
@@ -39,29 +44,32 @@ const PropertySchema = new Schema(
 
 		beds: {
 			type: Number,
+			required: true,
 		},
 
 		baths: {
 			type: Number,
+			required: true,
 		},
 
 		square_feet: {
 			type: Number,
+			required: true,
 		},
 
 		amenities: [{ type: String }],
 
 		rates: {
+			nightly: {
+				type: Number,
+			},
+
 			weekly: {
-				type: String,
+				type: Number,
 			},
 
 			monthly: {
-				type: String,
-			},
-
-			nightly: {
-				type: String,
+				type: Number,
 			},
 		},
 
@@ -86,6 +94,7 @@ const PropertySchema = new Schema(
 	},
 	{
 		timestamps: true,
+		collection: "properties",
 	},
 );
 
