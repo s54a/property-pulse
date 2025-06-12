@@ -2,14 +2,9 @@ import { Schema, model, models } from "mongoose";
 
 const PropertySchema = new Schema(
 	{
-		// owner: {
-		// 	type: Schema.Types.ObjectId,
-		// 	ref: "User",
-		// 	required: true,
-		// },
-
 		owner: {
-			type: String,
+			type: Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 		},
 
