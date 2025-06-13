@@ -1,11 +1,13 @@
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
+import { NextRequest } from "next/server";
 // import fs from "fs/promises";
 // import path from "path";
 
 // export const dynamic = "force-dynamic";
 
-export const GET = async () => {
+//Get /api/properties
+export const GET = async (request: NextRequest) => {
 	try {
 		await connectDB();
 
