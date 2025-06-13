@@ -25,15 +25,19 @@ const PropertySchema = new Schema(
 		location: {
 			street: {
 				type: String,
+				required: true,
 			},
 			city: {
 				type: String,
+				required: true,
 			},
 			state: {
 				type: String,
+				required: true,
 			},
 			zipcode: {
 				type: String,
+				required: true,
 			},
 		},
 
@@ -71,16 +75,19 @@ const PropertySchema = new Schema(
 		seller_info: {
 			name: {
 				type: String,
+				required: true,
 			},
 			email: {
 				type: String,
+				required: true,
 			},
 			phone: {
 				type: String,
+				required: true,
 			},
 		},
 
-		images: [{ type: String }],
+		images: [{ type: String, required: true }],
 
 		is_featured: {
 			type: Boolean,

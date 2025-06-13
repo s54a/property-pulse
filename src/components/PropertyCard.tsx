@@ -2,38 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 import { FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker } from "react-icons/fa";
-
-interface Property {
-	_id: string;
-	owner: string;
-	name: string;
-	type: string;
-	description: string;
-	location: {
-		street: string;
-		city: string;
-		state: string;
-		zipcode: string;
-	};
-	beds: number;
-	baths: number;
-	square_feet: number;
-	amenities: string[];
-	rates: {
-		nightly?: number;
-		weekly?: number;
-		monthly?: number;
-	};
-	seller_info: {
-		name: string;
-		email: string;
-		phone: string;
-	};
-	images: string[];
-	is_featured: boolean;
-	createdAt: string;
-	updatedAt: string;
-}
+import { Property } from "@/types";
 
 interface PropertyCardProps {
 	property: Property;
@@ -43,12 +12,12 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
 	const getRateDisplay = () => {
 		const { rates } = property;
 
-		if (rates.monthly) {
-			return `${rates.monthly.toLocaleString()}/mo`;
-		} else if (rates.weekly) {
-			return `${rates.weekly.toLocaleString()}/wk`;
-		} else if (rates.nightly) {
-			return `${rates.nightly.toLocaleString()}/night`;
+		if (rates?.monthly) {
+			return `${rates?.monthly.toLocaleString()}/mo`;
+		} else if (rates?.weekly) {
+			return `${rates?.weekly.toLocaleString()}/wk`;
+		} else if (rates?.nightly) {
+			return `${rates?.nightly.toLocaleString()}/night`;
 		}
 	};
 
@@ -87,19 +56,19 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
 				</div>
 
 				<div className="mb-4 flex justify-center gap-4 text-sm text-green-900">
-					{property.rates.nightly && (
+					{property?.rates?.nightly && (
 						<p>
 							<FaMoneyBill className="mr-2 inline" /> Nightly
 						</p>
 					)}
 
-					{property.rates.weekly && (
+					{property?.rates?.weekly && (
 						<p>
 							<FaMoneyBill className="mr-2 inline" /> Weekly
 						</p>
 					)}
 
-					{property.rates.monthly && (
+					{property?.rates?.monthly && (
 						<p>
 							<FaMoneyBill className="mr-2 inline" /> Monthly
 						</p>
