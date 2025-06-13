@@ -10,7 +10,7 @@ interface LoadingPageProps {
 	loading: boolean;
 }
 
-const LoadingPage = ({ loading }: LoadingPageProps) => {
+const Spinner = ({ loading }: LoadingPageProps) => {
 	return (
 		<div className="flex min-h-screen items-center justify-center">
 			<ClipLoader
@@ -24,4 +24,4 @@ const LoadingPage = ({ loading }: LoadingPageProps) => {
 	);
 };
 
-export default LoadingPage;
+export default Spinner;
