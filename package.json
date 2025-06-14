@@ -12,6 +12,7 @@
 		"mongodb": "^6.17.0",
 		"mongoose": "^8.15.1",
 		"next": "15.3.3",
+		"next-auth": "^4.24.11",
 		"prettier": "^3.5.3",
 		"prettier-plugin-tailwindcss": "^0.6.12",
 		"react": "^19.0.0",
