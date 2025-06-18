@@ -1,5 +1,7 @@
+import connectDB from "@/config/database";
+import User from "@/models/User";
 import GoogleProvider from "next-auth/providers/google";
-import { Profile } from "next-auth";
+import { Profile, Session } from "next-auth";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 	throw new Error("Missing Google OAuth environment variables.");
@@ -23,15 +25,32 @@ export const authOptions = {
 		//Invoked on Successful SignIn
 		async signIn({ profile }: { profile: Profile }) {
 			// 1. Connect to Database
+			await connectDB();
 			// 2. Check if user exists
+			const userExists = await User.findOne({ email: profile.email });
+
 			// 3. If not, then add user to database
+			if (!userExists) {
+				const username = profile.name?.slice(0, 20);
+
+				await User.create({
+					email: profile.email,
+					username,
+					image: profile.image,
+				});
+			}
 			// 4. Return true to allow sign in
+			return true;
 		},
 		// Modifies the Session Object
-		async session({ profile }: { profile: Profile }) {
+		async session({ session }: { session: Session }) {
 			// 1. Get User from database
+			const user = await User.findOne({ email: session.user?.email });
 			// 2. Assign the user id to the session
+			// @ts-ignore
+			session.user.id = user._id.toString();
 			// 3. Return the Session
+			return session;
 		},
 	},
 };

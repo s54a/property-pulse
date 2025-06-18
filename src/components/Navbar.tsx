@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/assets/images/logo-white.png";
-import Profile from "@/assets/images/profile.png";
+import ProfileDefault from "@/assets/images/profile.png";
 import { FaGoogle } from "react-icons/fa";
 import { signIn, signOut, useSession, getProviders, ClientSafeProvider } from "next-auth/react";
 
 const Navbar = () => {
 	const { data: session } = useSession();
+
+	const profileImage = session?.user?.image;
+	// console.log(profileImage);
 
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -27,6 +30,7 @@ const Navbar = () => {
 	}, []);
 
 	// console.log(providers);
+	// console.log(session);
 
 	return (
 		<nav className="border-b border-blue-500 bg-blue-700">
@@ -150,6 +154,7 @@ const Navbar = () => {
 									2{/* <!-- Replace with the actual number of notifications --> */}
 								</span>
 							</Link>
+
 							{/* <!-- Profile dropdown button --> */}
 							<div className="relative ml-3">
 								<div>
@@ -165,7 +170,13 @@ const Navbar = () => {
 									>
 										<span className="absolute -inset-1.5"></span>
 										<span className="sr-only">Open user menu</span>
-										<Image className="h-8 w-8 rounded-full" src={Profile} alt="" />
+										<Image
+											alt="Profile Image"
+											src={profileImage || ProfileDefault}
+											className="h-8 w-8 rounded-full"
+											width={40}
+											height={40}
+										/>
 									</button>
 								</div>
 
