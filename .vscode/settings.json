@@ -1,13 +1,14 @@
 {
-  "workbench.colorCustomizations": {
-    "activityBar.background": "#000",
-    "titleBar.activeBackground": "#000",
-    "titleBar.activeForeground": "#0f0"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnType": true,
-  "files.autoSave": "afterDelay",
-  "prettier.endOfLine": "crlf"
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#000",
+		"titleBar.activeBackground": "#000",
+		"titleBar.activeForeground": "#0f0"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": true,
+	"files.autoSave": "afterDelay",
+	"prettier.endOfLine": "lf",
+	"typescript.tsdk": "node_modules\\typescript\\lib"
 }
