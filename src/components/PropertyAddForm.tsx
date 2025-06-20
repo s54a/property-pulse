@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 
 interface PropertyFields {
 	type: string;
@@ -58,9 +58,74 @@ const PropertyAddForm = () => {
 		images: [],
 	});
 
-	const handleChange = () => {};
-	const handleAmenitiesChange = () => {};
-	const handleImageChange = () => {};
+	const handleChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+	) => {
+		const { name, value } = e.target;
+
+		if (name.includes(".")) {
+			const [outerKey, innerKey] = name.split(".");
+
+			// Ensure we're only working with the *known* nested objects
+			if (outerKey === "location" || outerKey === "rates" || outerKey === "seller_info") {
+				setFields((prev) => ({
+					...prev,
+					[outerKey]: {
+						...prev[outerKey],
+						[innerKey]: value,
+					},
+				}));
+			}
+		} else {
+			setFields((prev) => ({
+				...prev,
+				[name]: value,
+			}));
+		}
+	};
+
+	const handleAmenitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { value, checked } = e.target;
+
+		// Clone the Current Array
+		const updatedAmenities = [...fields.amenities];
+
+		if (checked) {
+			// Add Value to Array
+			updatedAmenities.push(value);
+		} else {
+			// Remove Value from the Array
+			const index = updatedAmenities.indexOf(value);
+
+			if (index !== -1) {
+				updatedAmenities.splice(index, 1);
+			}
+		}
+
+		// Update State with updated Array
+		setFields((prev) => ({
+			...prev,
+			amenities: updatedAmenities,
+		}));
+	};
+
+	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { files } = e.target;
+
+		// Clone Images Array
+		const updatedImages = [...fields.images];
+
+		// Add the New Files to the Array
+
+		for (const file in files) {
+			updatedImages.push(file);
+		}
+
+		setFields((prev) => ({
+			...prev,
+			images: updatedImages,
+		}));
+	};
 
 	useEffect(() => {
 		setMounted(true);
