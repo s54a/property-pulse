@@ -107,21 +107,6 @@ const PropertyAddForm = () => {
 	const handleAmenitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
 
-		// // Clone the Current Array
-		// const updatedAmenities = [...fields.amenities];
-
-		// if (checked) {
-		// 	// Add Value to Array
-		// 	updatedAmenities.push(value);
-		// } else {
-		// 	// Remove Value from the Array
-		// 	const index = updatedAmenities.indexOf(value);
-
-		// 	if (index !== -1) {
-		// 		updatedAmenities.splice(index, 1);
-		// 	}
-		// }
-
 		const updatedAmenities = checked
 			? [...fields.amenities, value]
 			: fields.amenities.filter((item) => item !== value);
@@ -171,12 +156,7 @@ const PropertyAddForm = () => {
 
 	return (
 		mounted && (
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					console.log(fields);
-				}}
-			>
+			<form action="/api/properties" method="POST" encType="multipart/form-data">
 				<h2 className="mb-6 text-center text-3xl font-semibold">Add Property</h2>
 
 				<div className="mb-4">
@@ -407,7 +387,7 @@ const PropertyAddForm = () => {
 					<input
 						type="text"
 						id="seller_name"
-						name="seller_info.name."
+						name="seller_info.name"
 						className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						placeholder="Name"
 						value={fields.seller_info.name}
@@ -455,6 +435,7 @@ const PropertyAddForm = () => {
 						className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						accept="image/*"
 						multiple
+						required
 						onChange={handleImageChange}
 					/>
 				</div>
