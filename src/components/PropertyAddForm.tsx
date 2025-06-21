@@ -29,34 +29,54 @@ interface PropertyFields {
 	images: string[];
 }
 
+const amenitiesList = [
+	"Wifi",
+	"Full Kitchen",
+	"Washer & Dryer",
+	"Free Parking",
+	"Swimming Pool",
+	"Hot Tub",
+	"24/7 Security",
+	"Wheelchair Accessible",
+	"Elevator Access",
+	"Dishwasher",
+	"Gym/Fitness Center",
+	"Air Conditioning",
+	"Balcony/Patio",
+	"Smart TV",
+	"Coffee Maker",
+];
+
+const initialFields: PropertyFields = {
+	type: "Apartment",
+	name: "Test Property",
+	description: "",
+	location: {
+		street: "",
+		city: "Test City",
+		state: "Test State",
+		zipcode: "",
+	},
+	beds: "3",
+	baths: "2",
+	square_feet: "1800",
+	amenities: [],
+	rates: {
+		weekly: "",
+		monthly: "2000",
+		nightly: "",
+	},
+	seller_info: {
+		name: "",
+		email: "test@test.com",
+		phone: "",
+	},
+	images: [],
+};
+
 const PropertyAddForm = () => {
 	const [mounted, setMounted] = useState(false);
-	const [fields, setFields] = useState<PropertyFields>({
-		type: "Apartment",
-		name: "Test Property",
-		description: "",
-		location: {
-			street: "",
-			city: "Test City",
-			state: "Test State",
-			zipcode: "",
-		},
-		beds: "3",
-		baths: "2",
-		square_feet: "1800",
-		amenities: [],
-		rates: {
-			weekly: "",
-			monthly: "2000",
-			nightly: "",
-		},
-		seller_info: {
-			name: "",
-			email: "test@test.com",
-			phone: "",
-		},
-		images: [],
-	});
+	const [fields, setFields] = useState<PropertyFields>({ ...initialFields });
 
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -87,20 +107,24 @@ const PropertyAddForm = () => {
 	const handleAmenitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
 
-		// Clone the Current Array
-		const updatedAmenities = [...fields.amenities];
+		// // Clone the Current Array
+		// const updatedAmenities = [...fields.amenities];
 
-		if (checked) {
-			// Add Value to Array
-			updatedAmenities.push(value);
-		} else {
-			// Remove Value from the Array
-			const index = updatedAmenities.indexOf(value);
+		// if (checked) {
+		// 	// Add Value to Array
+		// 	updatedAmenities.push(value);
+		// } else {
+		// 	// Remove Value from the Array
+		// 	const index = updatedAmenities.indexOf(value);
 
-			if (index !== -1) {
-				updatedAmenities.splice(index, 1);
-			}
-		}
+		// 	if (index !== -1) {
+		// 		updatedAmenities.splice(index, 1);
+		// 	}
+		// }
+
+		const updatedAmenities = checked
+			? [...fields.amenities, value]
+			: fields.amenities.filter((item) => item !== value);
 
 		// Update State with updated Array
 		setFields((prev) => ({
@@ -110,15 +134,15 @@ const PropertyAddForm = () => {
 	};
 
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { files } = e.target;
-
+		const files = e.target.files;
 		// Clone Images Array
 		const updatedImages = [...fields.images];
+		if (files) {
+			// Add the New Files to the Array
 
-		// Add the New Files to the Array
-
-		for (const file in files) {
-			updatedImages.push(file);
+			for (const file in files) {
+				updatedImages.push(file); // Use file.name or customize logic as needed
+			}
 		}
 
 		setFields((prev) => ({
@@ -127,13 +151,32 @@ const PropertyAddForm = () => {
 		}));
 	};
 
+	const resetForm = () => setFields({ ...initialFields });
+
+	const clearAmenities = () =>
+		setFields((prev) => ({
+			...prev,
+			amenities: [],
+		}));
+
+	const selectAllAmenities = () =>
+		setFields((prev) => ({
+			...prev,
+			amenities: [...amenitiesList],
+		}));
+
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
 	return (
 		mounted && (
-			<form>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					console.log(fields);
+				}}
+			>
 				<h2 className="mb-6 text-center text-3xl font-semibold">Add Property</h2>
 
 				<div className="mb-4">
@@ -274,187 +317,39 @@ const PropertyAddForm = () => {
 
 				<div className="mb-4">
 					<label className="mb-2 block font-bold text-gray-700">Amenities</label>
+
+					<div className="mb-2 flex space-x-2">
+						<button
+							type="button"
+							onClick={clearAmenities}
+							className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
+						>
+							Clear Amenities
+						</button>
+						<button
+							type="button"
+							onClick={selectAllAmenities}
+							className="rounded bg-green-500 px-2 py-1 text-white hover:bg-green-600"
+						>
+							Select All Amenities
+						</button>
+					</div>
+
 					<div className="grid grid-cols-2 gap-2 md:grid-cols-3">
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_wifi"
-								name="amenities"
-								value="Wifi"
-								className="mr-2"
-								checked={fields.amenities.includes("Wifi")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_wifi">Wifi</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_kitchen"
-								name="amenities"
-								value="Full Kitchen"
-								className="mr-2"
-								checked={fields.amenities.includes("Full Kitchen")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_kitchen">Full kitchen</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_washer_dryer"
-								name="amenities"
-								value="Washer & Dryer"
-								className="mr-2"
-								checked={fields.amenities.includes("Washer & Dryer")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_washer_dryer">Washer & Dryer</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_free_parking"
-								name="amenities"
-								value="Free Parking"
-								className="mr-2"
-								checked={fields.amenities.includes("Free Parking")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_free_parking">Free Parking</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_pool"
-								name="amenities"
-								value="Swimming Pool"
-								className="mr-2"
-								checked={fields.amenities.includes("Swimming Pool")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_pool">Swimming Pool</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_hot_tub"
-								name="amenities"
-								value="Hot Tub"
-								className="mr-2"
-								checked={fields.amenities.includes("Hot Tub")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_hot_tub">Hot Tub</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_24_7_security"
-								name="amenities"
-								value="24/7 Security"
-								className="mr-2"
-								checked={fields.amenities.includes("24/7 Security")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_24_7_security">24/7 Security</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_wheelchair_accessible"
-								name="amenities"
-								value="Wheelchair Accessible"
-								className="mr-2"
-								checked={fields.amenities.includes("Wheelchair Accessible")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_wheelchair_accessible">Wheelchair Accessible</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_elevator_access"
-								name="amenities"
-								value="Elevator Access"
-								className="mr-2"
-								checked={fields.amenities.includes("Elevator Access")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_elevator_access">Elevator Access</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_dishwasher"
-								name="amenities"
-								value="Dishwasher"
-								className="mr-2"
-								checked={fields.amenities.includes("Dishwasher")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_dishwasher">Dishwasher</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_gym_fitness_center"
-								name="amenities"
-								value="Gym/Fitness Center"
-								className="mr-2"
-								checked={fields.amenities.includes("Gym/Fitness Center")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_gym_fitness_center">Gym/Fitness Center</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_air_conditioning"
-								name="amenities"
-								value="Air Conditioning"
-								className="mr-2"
-								checked={fields.amenities.includes("Air Conditioning")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_air_conditioning">Air Conditioning</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_balcony_patio"
-								name="amenities"
-								value="Balcony/Patio"
-								className="mr-2"
-								checked={fields.amenities.includes("Balcony/Patio")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_balcony_patio">Balcony/Patio</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_smart_tv"
-								name="amenities"
-								value="Smart TV"
-								className="mr-2"
-								checked={fields.amenities.includes("Smart TV")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_smart_tv">Smart TV</label>
-						</div>
-						<div>
-							<input
-								type="checkbox"
-								id="amenity_coffee_maker"
-								name="amenities"
-								value="Coffee Maker"
-								className="mr-2"
-								checked={fields.amenities.includes("Coffee Maker")}
-								onChange={handleAmenitiesChange}
-							/>
-							<label htmlFor="amenity_coffee_maker">Coffee Maker</label>
-						</div>
+						{amenitiesList.map((amenity) => (
+							<div key={amenity}>
+								<input
+									type="checkbox"
+									id={`amenity_${amenity}`}
+									name="amenities"
+									value={amenity}
+									className="mr-2"
+									checked={fields.amenities.includes(amenity)}
+									onChange={handleAmenitiesChange}
+								/>
+								<label htmlFor={`amenity_${amenity}`}>{amenity}</label>
+							</div>
+						))}
 					</div>
 				</div>
 
@@ -564,12 +459,21 @@ const PropertyAddForm = () => {
 					/>
 				</div>
 
-				<div>
+				<div></div>
+
+				<div className="flex space-x-2">
 					<button
-						className="focus:shadow-outline w-full rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 focus:outline-none"
+						className="focus:shadow-outline w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none"
 						type="submit"
 					>
 						Add Property
+					</button>
+					<button
+						type="button"
+						onClick={resetForm}
+						className="focus:shadow-outline w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600 focus:outline-none"
+					>
+						Reset Form
 					</button>
 				</div>
 			</form>
