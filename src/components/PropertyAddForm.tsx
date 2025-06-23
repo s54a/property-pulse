@@ -216,6 +216,7 @@ const PropertyAddForm = () => {
 						name="location.street"
 						className="mb-2 w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						placeholder="Street"
+						required
 						value={fields.location.street}
 						onChange={handleChange}
 					/>
@@ -245,6 +246,7 @@ const PropertyAddForm = () => {
 						name="location.zipcode"
 						className="mb-2 w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						placeholder="Zipcode"
+						required
 						value={fields.location.zipcode}
 						onChange={handleChange}
 					/>
@@ -390,6 +392,7 @@ const PropertyAddForm = () => {
 						name="seller_info.name"
 						className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						placeholder="Name"
+						required
 						value={fields.seller_info.name}
 						onChange={handleChange}
 					/>
@@ -419,6 +422,7 @@ const PropertyAddForm = () => {
 						name="seller_info.phone"
 						className="w-full rounded border border-gray-300 px-3 py-2 focus:outline-gray-400"
 						placeholder="Phone"
+						required
 						value={fields.seller_info.phone}
 						onChange={handleChange}
 					/>

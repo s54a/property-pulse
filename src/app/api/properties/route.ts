@@ -1,6 +1,7 @@
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import { NextRequest } from "next/server";
+import { getSessionUser } from "@/utils/getSessionUser";
 
 //Get /api/properties
 export const GET = async (request: NextRequest) => {
@@ -18,6 +19,16 @@ export const GET = async (request: NextRequest) => {
 //Post /api/properties
 export const POST = async (request: NextRequest) => {
 	try {
+		await connectDB();
+
+		const sessionUser = await getSessionUser();
+
+		if (!sessionUser || !sessionUser.userId) {
+			return new Response("User ID is required", { status: 401 });
+		}
+
+		const { userId } = sessionUser;
+
 		const formData = await request.formData();
 
 		const amenities = formData.getAll("amenities");
@@ -53,12 +64,17 @@ export const POST = async (request: NextRequest) => {
 				email: formData.get("seller_info.email"),
 				phone: formData.get("seller_info.phone"),
 			},
-			filteredImages,
+			owner: userId,
+			// filteredImages,
 		};
 
-		console.log(propertyData);
+		const newProperty = new Property(propertyData);
+		await newProperty.save();
+		// console.log(propertyData);
 
-		return new Response(JSON.stringify({ message: propertyData }), { status: 200 });
+		// return new Response(JSON.stringify({ message: propertyData }), { status: 200 });
+
+		return Response.redirect(`${process.env.NEXTAUTH_URL}/properties/${newProperty._id}`);
 	} catch (error) {
 		console.error("Error:", error);
 		return new Response("Failed to Add Property", { status: 500 });
