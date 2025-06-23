@@ -2,6 +2,8 @@ import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import { NextRequest } from "next/server";
 import { getSessionUser } from "@/utils/getSessionUser";
+import cloudinary from "@/config/cloudinary";
+import { PropertyData } from "@/types/index";
 
 //Get /api/properties
 export const GET = async (request: NextRequest) => {
@@ -40,7 +42,7 @@ export const POST = async (request: NextRequest) => {
 
 		const filteredImages = (images as File[]).filter((image) => image.name !== "");
 
-		const propertyData = {
+		const propertyData: PropertyData = {
 			type: formData.get("type"),
 			name: formData.get("name"),
 			description: formData.get("description"),
@@ -64,9 +66,33 @@ export const POST = async (request: NextRequest) => {
 				email: formData.get("seller_info.email"),
 				phone: formData.get("seller_info.phone"),
 			},
+			images: [],
 			owner: userId,
-			// filteredImages,
 		};
+
+		const imageUploadPromises = [];
+
+		for (const image of filteredImages) {
+			const imageBuffer = await image.arrayBuffer();
+
+			const imageArray = Array.from(new Uint8Array(imageBuffer));
+			const imageData = Buffer.from(imageArray);
+
+			// Convert Image Data to base64
+			const imageBase64 = imageData.toString("base64");
+
+			// Make Request to upload to Cloudinary
+			const result = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64}`, {
+				folder: "PropertyPulse",
+			});
+
+			imageUploadPromises.push(result.secure_url);
+
+			// Wait for All Images to Upload
+			const uploadedImages = await Promise.all(imageUploadPromises);
+
+			propertyData.images = uploadedImages;
+		}
 
 		const newProperty = new Property(propertyData);
 		await newProperty.save();
