@@ -23,11 +23,12 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
 
 	return (
 		<div className="relative rounded-xl shadow-md">
+			{/* src={`/images/properties/${property.images[0]}`} */}
 			<Image
 				height={0}
 				width={0}
 				sizes="100vw"
-				src={`/images/properties/${property.images[0]}`}
+				src={property.images[0]}
 				alt={property.name}
 				className="h-auto w-full rounded-t-xl"
 			/>
